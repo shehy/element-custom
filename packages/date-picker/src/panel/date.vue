@@ -561,20 +561,24 @@
         if (this.userInputDate !== null) {
           return this.userInputDate;
         } else {
-          return formatDate(this.value || this.defaultValue, this.dateFormat);
+          const dat = this.value || this.defaultValue;
+          var nd = new Date(dat.valueOf());
+          nd.setFullYear(nd.getFullYear() + 543);
+          return formatDate(nd, this.dateFormat);
         }
       },
 
       yearLabel() {
         const yearTranslation = this.t('el.datepicker.year');
+        const displayYear = (this.buddhistYear && !this.userInputDate) ? (this.year + 543) : this.year;
         if (this.currentView === 'year') {
-          const startYear = Math.floor(this.year / 10) * 10;
+          const startYear = Math.floor(displayYear / 10) * 10;
           if (yearTranslation) {
             return startYear + ' ' + yearTranslation + ' - ' + (startYear + 9) + ' ' + yearTranslation;
           }
           return startYear + ' - ' + (startYear + 9);
         }
-        return this.year + ' ' + yearTranslation;
+        return displayYear + ' ' + yearTranslation;
       },
 
       timeFormat() {

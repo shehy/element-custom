@@ -111,11 +111,13 @@
       },
 
       leftLabel() {
-        return this.leftDate.getFullYear() + ' ' + this.t('el.datepicker.year');
+        const year = this.buddhistYear ? (this.leftDate.getFullYear() + 543) : this.leftDate.getFullYear();
+        return year + ' ' + this.t('el.datepicker.year');
       },
 
       rightLabel() {
-        return this.rightDate.getFullYear() + ' ' + this.t('el.datepicker.year');
+        const year = this.buddhistYear ? (this.rightDate.getFullYear() + 543) : this.leftDate.getFullYear();
+        return year + ' ' + this.t('el.datepicker.year');
       },
 
       leftYear() {

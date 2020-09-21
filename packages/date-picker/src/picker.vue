@@ -248,7 +248,7 @@ const TYPE_VALUE_RESOLVER_MAP = {
   },
   dates: {
     formatter(value, format) {
-      return value.map(date => DATE_FORMATTER(date, format));
+      return isValidDate(value) ? value.map(date => DATE_FORMATTER(date, format)) : [];
     },
     parser(value, format) {
       return (typeof value === 'string' ? value.split(', ') : value)
@@ -260,6 +260,10 @@ const PLACEMENT_MAP = {
   left: 'bottom-start',
   center: 'bottom',
   right: 'bottom-end'
+};
+
+const isValidDate = (date) => {
+  return date instanceof Date && !isNaN(date.getTime());
 };
 
 const parseAsFormatAndType = (value, customFormat, type, rangeSeparator = '-') => {
@@ -360,6 +364,7 @@ export default {
       validator
     },
     disabled: Boolean,
+    buddhistYear: Boolean,
     clearable: {
       type: Boolean,
       default: true
@@ -502,7 +507,22 @@ export default {
     },
 
     displayValue() {
-      const formattedValue = formatAsFormatAndType(this.parsedValue, this.format, this.type, this.rangeSeparator);
+      var parsedValue = this.parsedValue;
+      if (this.buddhistYear) {
+        if (Array.isArray(this.parsedValue)) {
+          parsedValue = [];
+          this.parsedValue.forEach((dat) => {
+            const nd = new Date(dat.valueOf());
+            nd.setFullYear(nd.getFullYear() + 543);
+            parsedValue.push(nd);
+          });
+        } else if (this.parsedValue) {
+          const nd = new Date(this.parsedValue.valueOf());
+          nd.setFullYear(nd.getFullYear() + 543);
+          parsedValue = new Date(nd.valueOf());
+        }
+      }
+      const formattedValue = formatAsFormatAndType(parsedValue, this.format, this.type, this.rangeSeparator);
       if (Array.isArray(this.userInput)) {
         return [
           this.userInput[0] || (formattedValue && formattedValue[0]) || '',
@@ -822,6 +842,7 @@ export default {
 
     mountPicker() {
       this.picker = new Vue(this.panel).$mount();
+      this.picker.buddhistYear = this.buddhistYear;
       this.picker.defaultValue = this.defaultValue;
       this.picker.defaultTime = this.defaultTime;
       this.picker.popperClass = this.popperClass;

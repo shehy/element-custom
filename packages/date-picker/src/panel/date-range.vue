@@ -231,11 +231,13 @@
       },
 
       leftLabel() {
-        return this.leftDate.getFullYear() + ' ' + this.t('el.datepicker.year') + ' ' + this.t(`el.datepicker.month${ this.leftDate.getMonth() + 1 }`);
+        const year = this.buddhistYear ? (this.leftDate.getFullYear() + 543) : this.leftDate.getFullYear();
+        return year + this.t('el.datepicker.year') + ' ' + this.t(`el.datepicker.month${ this.leftDate.getMonth() + 1 }`);
       },
 
       rightLabel() {
-        return this.rightDate.getFullYear() + ' ' + this.t('el.datepicker.year') + ' ' + this.t(`el.datepicker.month${ this.rightDate.getMonth() + 1 }`);
+        const year = this.buddhistYear ? (this.rightDate.getFullYear() + 543) : this.rightDate.getFullYear();
+        return year + ' ' + this.t('el.datepicker.year') + ' ' + this.t(`el.datepicker.month${ this.rightDate.getMonth() + 1 }`);
       },
 
       leftYear() {
@@ -317,6 +319,7 @@
       return {
         popperClass: '',
         value: [],
+        buddhistYear: false,
         defaultValue: null,
         defaultTime: null,
         minDate: '',
